@@ -1,7 +1,20 @@
+global count
+count = 0
+
+"""
+    function satSolver
+    
+    input:
+      file in Dimacs format
+	  file in which we write the solution, if output file is not defined, it is named "solution.txt"
+
+"""
+
 def satSolver(file_read, file_write="solution.txt"):
 	cnf, num_vars, num_clauses = readFile(file_read)
 	status, _, values = dpll(cnf, num_vars, dict())
 	writeFile(values, file_write)
+	print(count)
 
 """
     function readFile
@@ -40,6 +53,14 @@ def readFile(inputFile):
           
     return cnf, numOfVars, numOfClauses
 	
+"""
+    function writeFile
+    
+    input:
+      solution as list of variables
+	  file in which we write the solution
+
+"""
 def writeFile(solution, file):
     openF = open(file, "w")
     for key, value in solution.items():
@@ -288,10 +309,14 @@ def dpll(fiInput, numOfVars, values):
         for otherClause in otherClauses:
             currentElement = dict()
             currentElement[otherClause] = True
+			global count
+			count += 1
             fiNew2 = list(fiNew)
             fiNew2.append(currentElement)
             status, oldFormula, values = dpll(fiNew2, numOfVars, values)
             if status is False:
+				global count
+				count += 1
                 fiNew2 = list(oldFormula)
                 # change currentElement value from True to False
                 fiNew2[len(fiNew2)-1][otherClause] = False
