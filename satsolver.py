@@ -1,3 +1,8 @@
+def sat_solver(file_read, file_write="solution.txt"):
+	cnf, num_vars, num_clauses = read_file(file_read)
+	status, _, values = dpll(cnf, num_vars, dict())
+	write_file(values, file_write)
+
 """
     function readFile
     
@@ -34,6 +39,16 @@ def readFile(inputFile):
             cnf.append(expression)
           
     return cnf, numOfVars, numOfClauses
+	
+def write_file(solution, file):
+    openF = open(file, "w")
+    for key, value in solution.items():
+        if value:
+            openF.write(str(key) + " ")
+        else:
+            openF.write(str(-key) + " ")
+
+    openF.close()
 
 """
     function findAllVars
@@ -55,27 +70,6 @@ def findAllVars(fi):
     
     return vars
 
-"""
-    function findOtherClauses
-    
-    input:
-      number of all variables in conjunctive normal form (CNF)
-      unit clauses
-      pure clauses
-      variables with set values
-      number of repeats - ? -
-    output:
-      list with variables which not appear in unit and pure clauses
-"""
-def findOtherClauses(numOfVars, unitClauses, pureClauses, values, numOfRepeats):
-    otherClauses = []
-    numOfRepeats = numOfRepeats.sorted(numOfRepeats.items(), key = numOfRepeats.get)
-
-    for index in range(1, numOfVars+1):
-        if index not in unitClauses and index not in pureClauses and index not in values:
-            otherClauses.insert(0,index)
-
-    return otherClauses
 
 """
     function findUnitAndPureClauses
