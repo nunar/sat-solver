@@ -1,7 +1,7 @@
-def sat_solver(file_read, file_write="solution.txt"):
-	cnf, num_vars, num_clauses = read_file(file_read)
+def satSolver(file_read, file_write="solution.txt"):
+	cnf, num_vars, num_clauses = readFile(file_read)
 	status, _, values = dpll(cnf, num_vars, dict())
-	write_file(values, file_write)
+	writeFile(values, file_write)
 
 """
     function readFile
@@ -40,7 +40,7 @@ def readFile(inputFile):
           
     return cnf, numOfVars, numOfClauses
 	
-def write_file(solution, file):
+def writeFile(solution, file):
     openF = open(file, "w")
     for key, value in solution.items():
         if value:
