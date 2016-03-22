@@ -1,20 +1,40 @@
-global count
-count = 0
-
 """
     function satSolver
     
     input:
       file in Dimacs format
-	  file in which we write the solution, if output file is not defined, it is named "solution.txt"
-
+      file in which we write the solution, if output file is not defined, it is named "_solution.txt"
 """
+def satSolver(fileInput, fileOutput = False):
+    cnf, numOfVars, numOfClauses = readFile(fileInput)
+    status, _, values = dpll(cnf, numOfVars, dict())
+    
+    # write solution to file
+    if fileOutput is False:
+        fileOutput = fileInput.replace(".txt", "_solution.txt")
+        writeFile(values, fileOutput)
+    # check solution
+    else:
+        res = []
+        for key, value in values.items():
+            if value:
+                res.append(key)
+            else:
+                res.append(-key)
+        
+        file = open(fileOutput)
+        lines = file.readlines()
+        solution = lines[0].split()
+        okay = True
+        for i in range(0, len(res)):
+            r = res[abs(int(solution[i]))-1]
+            if r != int(solution[i]):
+                okay = False
+                return False, dict()
+                break
+        if okay is True:
+            return True, dict()
 
-def satSolver(file_read, file_write="solution.txt"):
-	cnf, num_vars, num_clauses = readFile(file_read)
-	status, _, values = dpll(cnf, num_vars, dict())
-	writeFile(values, file_write)
-	print(count)
 
 """
     function readFile
@@ -52,13 +72,14 @@ def readFile(inputFile):
             cnf.append(expression)
           
     return cnf, numOfVars, numOfClauses
-	
+
+
 """
     function writeFile
     
     input:
       solution as list of variables
-	  file in which we write the solution
+      file in which we write the solution
 
 """
 def writeFile(solution, file):
@@ -70,6 +91,7 @@ def writeFile(solution, file):
             openF.write(str(-key) + " ")
 
     openF.close()
+
 
 """
     function findAllVars
@@ -86,7 +108,7 @@ def findAllVars(fi):
     for l in fi:
         # za vsako formulo pogledamo posamezne elemente
         for var in l:
-            #element dodamo v seznam
+            # element dodamo v seznam
             vars.add(var)
     
     return vars
@@ -165,6 +187,7 @@ def findUnitAndPureClauses(fi, numOfVars):
     
     return unitClauses, pureClauses, numOfRepeats
 
+
 """
     function simplify
     
@@ -189,7 +212,7 @@ def simplify(fi, unitClauses, pureClauses, values, numOfRepeats):
     
     fiNew = list(fi)
     
-    # first chech all unit clauses
+    # first check all unit clauses
     for l in unitClauses:
         value = unitClauses[l]
         values[l] = value
@@ -243,6 +266,7 @@ def removeExpression(fi, var, numOfRepeats):
                         numOfRepeats[literal] -= 1
     return newFormula, numOfRepeats
 
+
 """
     function removeVar
     
@@ -261,6 +285,7 @@ def removeVar(fi, var):
                 del lNew[x]
         formulaNew.append(lNew)
     return formulaNew
+
 
 """
     function DPLL
@@ -309,14 +334,10 @@ def dpll(fiInput, numOfVars, values):
         for otherClause in otherClauses:
             currentElement = dict()
             currentElement[otherClause] = True
-			global count
-			count += 1
             fiNew2 = list(fiNew)
             fiNew2.append(currentElement)
             status, oldFormula, values = dpll(fiNew2, numOfVars, values)
             if status is False:
-				global count
-				count += 1
                 fiNew2 = list(oldFormula)
                 # change currentElement value from True to False
                 fiNew2[len(fiNew2)-1][otherClause] = False
@@ -324,41 +345,3 @@ def dpll(fiInput, numOfVars, values):
             else:
                 #values.pop(otherClause, True)
                 return True, oldFormula, values
-
-"""
-    function checkSudoku
-    
-    input:
-      sudoku problem
-      sudoku solution (optional)
-    output:
-      status
-      values (if sudoku solution is False)
-"""
-def checkSudoku(sudokuProblem, sudokuSolution = False):
-    cnf, numOfVars, numOfClauses = readFile("tests/"+sudokuProblem)
-    status, _, values = dpll(cnf, numOfVars, dict())
-    
-    if sudokuSolution is False:
-        return status, values
-    else:
-        # check solution
-        res = []
-        for key, value in values.items():
-            if value:
-                res.append(key)
-            else:
-                res.append(-key)
-        
-        file = open("tests/"+sudokuSolution)
-        lines = file.readlines()
-        solution = lines[0].split()
-        okay = True
-        for i in range(0, len(res)):
-            r = res[abs(int(solution[i]))-1]
-            if r != int(solution[i]):
-                okay = False
-                return False, dict()
-                break
-        if okay is True:
-            return True, dict()
