@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import random
 import sys
 
-
-
 def vrni_graf(stevilo_vozlisc, st_povezav):
 
     states = [i+1 for i in range(stevilo_vozlisc)]
@@ -186,9 +184,3 @@ else:
     print "Za barvanje smo uporabili prevec barv"
 
 plt.show()
-
-
-
-
-
-
