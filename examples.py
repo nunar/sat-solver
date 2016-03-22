@@ -1,4 +1,4 @@
-from satsolver import *
+from functions import *
 
 """
     1.1 EXAMPLE
@@ -30,11 +30,11 @@ print("\tSolution",values,"\n")
 """
 print("Example 1.3")
 print("\tSudoku 3x3")
-status, values = checkSudoku("sudoku1.txt","sudoku1_solution.txt")
+status, _ = satSolver("tests/sudoku1.txt","tests/sudoku1_solution.txt")
 if status is True:
-    print ("\tSOLUTION IS OKAY :)\n")
+    print("\tSOLUTION IS OKAY :)")
 else:
-    print("\tWRONG SOLUTION :(\n")
+    print("\tWRONG SOLUTION :(")
 
 """
     1.4 EXAMPLE
@@ -42,8 +42,8 @@ else:
 """
 print("Example 1.4")
 print("\tSudoku 9x9")
-status, values = checkSudoku("sudoku2.txt","sudoku2_solution.txt")
+status, _ = satSolver("tests/sudoku2.txt","tests/sudoku2_solution.txt")
 if status is True:
-    print ("\tSOLUTION IS OKAY :)\n")
+    print("\tSOLUTION IS OKAY :)")
 else:
-    print("\tWRONG SOLUTION :(\n")
+    print("\tWRONG SOLUTION :(")
