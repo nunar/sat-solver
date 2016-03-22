@@ -6,6 +6,9 @@ If SAT solving succeeds it return a satisfying valuation.
 
 We improve the efficiency of SAT solver by modifying the search strategy. At point, where we have to set value for variable, our algorithm selects the variable that occurs most often.
 
+We wrote the [script](tests/_generate_graph.py ) that constructs a graph for chosen number of vertices and colors it using greedy algorithm. We used it as a tool to prepare tests for our SAT solver to determine if the graph is 3 colorable. 
+
+
 ## How to use SAT solver ##
 There are a few more examples in [examples.py](examples.py) where you can find how to use SAT solver to get values, etc.
 
