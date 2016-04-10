@@ -7,12 +7,19 @@ import os.path
       file in Dimacs format
       file in which we write the solution, if output file is not defined, it is named "_solution.txt"
 """
-def satSolver(fileInput, fileOutput = False):
+def satSolver(fileInput, fileOutput):
     cnf, numOfVars, numOfClauses = readFile(fileInput)
     status, _, values = dpll(cnf, numOfVars, dict())
     
+    # write solution to file
+    if fileOutput is False:
+        fileOutput = fileInput.replace(".txt", "_solution.txt")
+        writeFile(values, fileOutput)
+    # output filename is given
+    elif not os.path.isfile(fileOutput):
+        writeFile(values, fileOutput)
     # check solution
-    if os.path.exists(fileOutput):
+    else:
         res = []
         for key, value in values.items():
             if value:
@@ -32,11 +39,6 @@ def satSolver(fileInput, fileOutput = False):
                 break
         if okay is True:
             return True, dict()
-    else:
-        if fileOutput is False:
-            fileOutput = fileInput.replace(".txt", "_solution.txt")
-        writeFile(values, fileOutput)
-
 
 
 """
