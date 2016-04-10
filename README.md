@@ -32,3 +32,5 @@ status, _ = satSolver(problem, solution)
 # e.g.
 status, _ = satSolver("tests/graph2.txt","tests/graph2_solution.txt")
 ```
+
+In case that solution file does not exists, SAT solver will write solution to given file.
