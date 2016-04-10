@@ -1,3 +1,5 @@
+import os.path
+
 """
     function satSolver
     
@@ -9,12 +11,8 @@ def satSolver(fileInput, fileOutput = False):
     cnf, numOfVars, numOfClauses = readFile(fileInput)
     status, _, values = dpll(cnf, numOfVars, dict())
     
-    # write solution to file
-    if fileOutput is False:
-        fileOutput = fileInput.replace(".txt", "_solution.txt")
-        writeFile(values, fileOutput)
     # check solution
-    else:
+    if os.path.exists(fileOutput):
         res = []
         for key, value in values.items():
             if value:
@@ -34,6 +32,11 @@ def satSolver(fileInput, fileOutput = False):
                 break
         if okay is True:
             return True, dict()
+    else:
+        if fileOutput is False:
+            fileOutput = fileInput.replace(".txt", "_solution.txt")
+        writeFile(values, fileOutput)
+
 
 
 """
